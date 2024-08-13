@@ -40,8 +40,13 @@ func startRepl(cfg *config) {
 		words := cleanInput(reader.Text())
 		commandName := words[0]
 
+		var args []string
+		if len(words) > 1 {
+			args = words[1:]
+		}
+
 		if command, exist := commandsMap[commandName]; exist {
-			if err := command.callback(cfg); err != nil {
+			if err := command.callback(cfg, args...); err != nil {
 				fmt.Println(colorize(Red, err.Error()))
 			}
 		} else {
@@ -59,7 +64,7 @@ func cleanInput(text string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, ...string) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -76,13 +81,18 @@ func getCommands() map[string]cliCommand {
 		},
 		"map": {
 			name:        "map",
-			description: "Display the names of 20 LocationResponse areas",
+			description: "Get the next page of locations",
 			callback:    commandMapf,
 		},
 		"mapb": {
 			name:        "map",
-			description: "Display the names of the previous 20 LocationResponse areas",
+			description: "Get the previous page of locations",
 			callback:    commandMapb,
+		},
+		"explore": {
+			name:        "explore <location-name>",
+			description: "Explore a location",
+			callback:    commandExplore,
 		},
 	}
 }

@@ -17,8 +17,8 @@ type Cache struct {
 
 func (c *Cache) reapLoop(interval time.Duration) {
 	ticker := time.NewTicker(interval)
-	for range ticker.C {
-		c.reap(time.Now().UTC(), interval)
+	for t := range ticker.C {
+		c.reap(t.UTC(), interval)
 	}
 }
 
