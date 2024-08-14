@@ -25,7 +25,7 @@ func commandCatch(cfg *config, args ...string) error {
 	}
 
 	fmt.Printf("%s was caught!\n", pokemon.Name)
-	cfg.caughtPokemon[pokemon.Name] = pokemon
+	cfg.caughtPokemons[pokemon.Name] = pokemon
 
 	return nil
 }
@@ -42,8 +42,7 @@ func tryCatchingPokemon(baseExp int) bool {
 	invertedExp := maxBaseExp - baseExp + minBaseExp
 	catchProbability := float64(invertedExp) / float64(maxBaseExp+minBaseExp) * 100
 
-	reductionFactor := 0.9
-	randomNumber := rand.Float64() * 100 * reductionFactor
+	randomNumber := rand.Float64() * 100
 
-	return randomNumber <= catchProbability
+	return randomNumber >= catchProbability
 }
