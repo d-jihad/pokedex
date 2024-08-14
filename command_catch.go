@@ -18,7 +18,6 @@ func commandCatch(cfg *config, args ...string) error {
 
 	fmt.Printf("Throwing a Pokeball at %s...\n", pokemon.Name)
 
-	// Determine if the Pokémon is caught.
 	if !tryCatchingPokemon(pokemon.BaseExperience) {
 		fmt.Printf("%s escaped!\n", pokemon.Name)
 		return nil
@@ -26,6 +25,7 @@ func commandCatch(cfg *config, args ...string) error {
 
 	fmt.Printf("%s was caught!\n", pokemon.Name)
 	cfg.caughtPokemons[pokemon.Name] = pokemon
+	fmt.Println("You may now inspect it with the inspect command.")
 
 	return nil
 }
@@ -40,9 +40,9 @@ func tryCatchingPokemon(baseExp int) bool {
 	}
 
 	invertedExp := maxBaseExp - baseExp + minBaseExp
-	catchProbability := float64(invertedExp) / float64(maxBaseExp+minBaseExp) * 100
+	catchProbability := float64(invertedExp) / float64(maxBaseExp+minBaseExp) * 100 * 0.9
 
 	randomNumber := rand.Float64() * 100
 
-	return randomNumber >= catchProbability
+	return randomNumber < catchProbability
 }
