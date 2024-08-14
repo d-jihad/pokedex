@@ -14,7 +14,7 @@ const (
 	Reset  color = "\033[0m"
 	Red    color = "\033[31m"
 	Green  color = "\033[32m"
-	Blue   color = "\033[34m"
+	Cyan   color = "\033[36m"
 	Yellow color = "\033[33m"
 )
 
@@ -26,6 +26,7 @@ type config struct {
 	pokeapiClient    pokeapi.Client
 	nextLocationsURL *string
 	prevLocationsURL *string
+	caughtPokemon    map[string]pokeapi.Pokemon
 }
 
 func startRepl(cfg *config) {
@@ -35,7 +36,9 @@ func startRepl(cfg *config) {
 	reader := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print(colorize(Green, "Pokedex > "))
+		fmt.Print(Cyan)
 		reader.Scan()
+		fmt.Print(Reset)
 
 		words := cleanInput(reader.Text())
 		commandName := words[0]
@@ -93,6 +96,11 @@ func getCommands() map[string]cliCommand {
 			name:        "explore <location-name>",
 			description: "Explore a location",
 			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch <pokemon-name>",
+			description: "Catch a pokemon",
+			callback:    commandCatch,
 		},
 	}
 }
